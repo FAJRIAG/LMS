@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['user_id', 'title', 'description', 'file_path', 'file_type'])]
+#[Fillable(['user_id', 'classroom_id', 'title', 'description', 'file_path', 'file_type'])]
 class Material extends Model
 {
     use HasFactory;

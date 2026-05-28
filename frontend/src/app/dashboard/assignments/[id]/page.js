@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import useSWR from 'swr';
-import axios, { downloadSecureFile } from '@/lib/axios';
+import axios, { downloadSecureFile, previewSecurePDF } from '@/lib/axios';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -194,12 +194,24 @@ export default function AssignmentDetail() {
                                     <h4 className="text-[10px] font-extrabold uppercase tracking-wider text-zinc-500">Berkas Yang Diunggah:</h4>
                                     <div className="bg-zinc-950 border border-zinc-850 p-4 rounded-xl flex items-center justify-between text-xs gap-4">
                                         <span className="font-mono text-zinc-300 truncate">{studentSubmission.file_path?.split('/').pop()}</span>
-                                        <button
-                                            onClick={() => downloadSecureFile(`/api/submissions/${studentSubmission.id}/download`, studentSubmission.file_path.split('/').pop())}
-                                            className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded font-semibold text-[10px] uppercase tracking-wider transition-colors cursor-pointer"
-                                        >
-                                            Unduh
-                                        </button>
+                                        <div className="flex items-center gap-2">
+                                            {studentSubmission.file_path?.endsWith('.pdf') && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => previewSecurePDF(`/api/submissions/${studentSubmission.id}/download`)}
+                                                    className="px-3 py-1.5 bg-indigo-900/50 hover:bg-indigo-800/80 text-indigo-300 border border-indigo-700/50 rounded font-semibold text-[10px] uppercase tracking-wider transition-colors cursor-pointer"
+                                                >
+                                                    Lihat PDF
+                                                </button>
+                                            )}
+                                            <button
+                                                type="button"
+                                                onClick={() => downloadSecureFile(`/api/submissions/${studentSubmission.id}/download`, studentSubmission.file_path.split('/').pop())}
+                                                className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded font-semibold text-[10px] uppercase tracking-wider transition-colors cursor-pointer"
+                                            >
+                                                Unduh
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -392,12 +404,24 @@ export default function AssignmentDetail() {
                                         {selectedSubmission.file_path?.split('/').pop()}
                                     </span>
                                 </div>
-                                <button
-                                    onClick={() => downloadSecureFile(`/api/submissions/${selectedSubmission.id}/download`, selectedSubmission.file_path.split('/').pop())}
-                                    className="px-4 py-2.5 text-[10px] uppercase font-bold tracking-wider rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white border border-zinc-750 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer text-center"
-                                >
-                                    Unduh Jawaban
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    {selectedSubmission.file_path?.endsWith('.pdf') && (
+                                        <button
+                                            type="button"
+                                            onClick={() => previewSecurePDF(`/api/submissions/${selectedSubmission.id}/download`)}
+                                            className="px-4 py-2.5 text-[10px] uppercase font-bold tracking-wider rounded-lg bg-indigo-900/50 hover:bg-indigo-800/80 text-indigo-300 hover:text-white border border-indigo-700/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer text-center"
+                                        >
+                                            Lihat PDF
+                                        </button>
+                                    )}
+                                    <button
+                                        type="button"
+                                        onClick={() => downloadSecureFile(`/api/submissions/${selectedSubmission.id}/download`, selectedSubmission.file_path.split('/').pop())}
+                                        className="px-4 py-2.5 text-[10px] uppercase font-bold tracking-wider rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white border border-zinc-750 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer text-center"
+                                    >
+                                        Unduh
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Grading Input Form */}

@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Classroom;
 use App\Models\Material;
 use App\Models\Assignment;
+use App\Models\Submission;
 use App\Models\AttendanceSession;
 use App\Models\Attendance;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -90,23 +91,47 @@ class DatabaseSeeder extends Seeder
         $classSiA = $classroomModels['SI-A'];
         $mahasiswa->classrooms()->attach([$classIfA->id, $classSiA->id]);
 
+        // Enroll 5 dummy students into every class
+        $faker = \Faker\Factory::create('id_ID');
+        foreach ($classroomModels as $classModel) {
+            for ($i = 0; $i < 5; $i++) {
+                $dummyStudent = User::create([
+                    'name' => $faker->name,
+                    'email' => $faker->unique()->safeEmail,
+                    'password' => 'password123',
+                    'role' => 'mahasiswa',
+                    'nim_nip' => $faker->numerify('120#######'),
+                ]);
+                $dummyStudent->classrooms()->attach($classModel->id);
+            }
+        }
+
         // 5. Seed initial dummy contents under IF-A classroom
         Material::create([
             'user_id' => $dosen->id,
             'classroom_id' => $classIfA->id,
             'title' => 'Pertemuan 1 - Arsitektur Web SPA',
             'description' => 'Materi pengenalan dasar arsitektur web modern, REST API, dan Stateful Session cookies.',
-            'file_path' => 'private/materials/placeholder_materi.pdf',
+            'file_path' => 'materials/placeholder_materi.pdf',
             'file_type' => 'pdf',
         ]);
 
-        Assignment::create([
+        $assignmentIfA = Assignment::create([
             'user_id' => $dosen->id,
             'classroom_id' => $classIfA->id,
             'title' => 'Tugas 1 - Pembuatan API Endpoint',
             'instructions' => 'Buatlah rancangan API endpoint sederhana untuk modul pendaftaran mahasiswa.',
             'attachment_path' => null,
             'deadline_at' => now()->addDays(7),
+        ]);
+
+        Submission::create([
+            'assignment_id' => $assignmentIfA->id,
+            'user_id' => $mahasiswa->id,
+            'student_notes' => 'Berikut adalah rancangan API endpoint yang saya buat.',
+            'file_path' => 'submissions/placeholder_jawaban.pdf',
+            'grade' => null,
+            'submitted_at' => now()->subHours(2),
         ]);
 
         $sessionIfA = AttendanceSession::create([
@@ -131,7 +156,7 @@ class DatabaseSeeder extends Seeder
             'classroom_id' => $classSiA->id,
             'title' => 'Pertemuan 1 - Pengantar Arsitektur Enterprise',
             'description' => 'Konsep dasar integrasi sistem, arsitektur berbasis layanan (SOA), dan pemodelan proses bisnis organisasi.',
-            'file_path' => 'private/materials/placeholder_materi.pdf',
+            'file_path' => 'materials/placeholder_materi.pdf',
             'file_type' => 'pdf',
         ]);
 

@@ -63,7 +63,7 @@ class MaterialController extends Controller
         $file = $request->file('file');
         
         // Store in secure private storage
-        $path = $file->store('private/materials');
+        $path = $file->store('materials');
 
         $material = Material::create([
             'user_id' => $user->id,

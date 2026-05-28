@@ -70,6 +70,16 @@ export default function Assignments() {
         }
     };
 
+    const handleDelete = async (id) => {
+        if (!confirm('Apakah Anda yakin ingin menghapus tugas ini? Semua data pengumpulan jawaban mahasiswa terkait juga akan dihapus.')) return;
+        try {
+            await axios.delete(`/api/assignments/${id}`);
+            mutate();
+        } catch (error) {
+            alert('Gagal menghapus tugas perkuliahan.');
+        }
+    };
+
     const getDaysUntil = (dateStr) => {
         const diff = new Date(dateStr) - new Date();
         return Math.ceil(diff / (1000 * 60 * 60 * 24));
@@ -300,15 +310,25 @@ export default function Assignments() {
                                     </div>
 
                                     {/* Action */}
-                                    <Link
-                                        href={`/dashboard/assignments/${assignment.id}`}
-                                        className="flex-shrink-0 self-start sm:self-center flex items-center gap-2 px-4 py-2.5 text-[10px] uppercase font-bold tracking-wider rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white border border-zinc-700 hover:border-zinc-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                                    >
-                                        {user?.role === 'dosen' ? 'Periksa Jawaban' : 'Detail & Unggah'}
-                                        <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </Link>
+                                    <div className="flex-shrink-0 self-start sm:self-center flex flex-col sm:flex-row gap-2">
+                                        {user?.role === 'dosen' && (
+                                            <button
+                                                onClick={() => handleDelete(assignment.id)}
+                                                className="flex justify-center items-center gap-2 px-4 py-2.5 text-[10px] uppercase font-bold tracking-wider rounded-xl bg-red-950/40 hover:bg-red-900/60 text-red-400 hover:text-white border border-red-900/40 hover:border-red-700/60 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                                            >
+                                                Hapus
+                                            </button>
+                                        )}
+                                        <Link
+                                            href={`/dashboard/assignments/${assignment.id}`}
+                                            className="flex justify-center items-center gap-2 px-4 py-2.5 text-[10px] uppercase font-bold tracking-wider rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white border border-zinc-700 hover:border-zinc-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                                        >
+                                            {user?.role === 'dosen' ? 'Periksa Jawaban' : 'Detail & Unggah'}
+                                            <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </Link>
+                                    </div>
                                 </div>
                             );
                         })}

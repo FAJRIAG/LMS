@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['user_id', 'meeting_number', 'topic', 'current_token', 'expires_at', 'is_active'])]
+#[Fillable(['user_id', 'classroom_id', 'meeting_number', 'topic', 'current_token', 'expires_at', 'is_active'])]
 class AttendanceSession extends Model
 {
     use HasFactory;

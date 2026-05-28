@@ -85,6 +85,12 @@ export default function DashboardHome() {
         || nameParts[nameParts.length - 1]
         || user?.name;
 
+    // Find active class and its lecturer for students
+    const activeClass = user?.role === 'mahasiswa' && user?.classrooms
+        ? user.classrooms.find(c => c.id == activeClassId)
+        : null;
+    const activeLecturer = activeClass?.lecturers?.[0]?.name;
+
     return (
         <div className="space-y-8 pb-8">
             {/* ===== GREETING HERO BANNER ===== */}
@@ -110,7 +116,15 @@ export default function DashboardHome() {
                                 {user?.role === 'dosen' ? 'Dosen Pengampu' : 'Mahasiswa Aktif'}
                             </span>
                         </h2>
-                        <p className="text-zinc-500 text-sm max-w-md leading-relaxed">
+                        
+                        {user?.role === 'mahasiswa' && activeLecturer && (
+                            <div className="flex items-center gap-2 text-blue-400 bg-blue-950/20 border border-blue-900/30 px-3.5 py-1.5 rounded-xl inline-flex">
+                                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                <span className="text-xs font-bold uppercase tracking-wider">Dosen: {activeLecturer}</span>
+                            </div>
+                        )}
+
+                        <p className="text-zinc-500 text-sm max-w-md leading-relaxed mt-1">
                             {user?.role === 'dosen'
                                 ? 'Kelola distribusi materi, tugas mahasiswa, dan monitoring presensi kelas secara real-time.'
                                 : 'Akses materi kuliah, kumpulkan tugas tepat waktu, dan verifikasi kehadiran kelas dengan QR absensi.'}

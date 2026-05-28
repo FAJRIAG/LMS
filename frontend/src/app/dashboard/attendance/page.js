@@ -89,6 +89,17 @@ export default function AttendanceDashboard() {
         }
     };
 
+    const handleDeleteSession = async (session) => {
+        if (!confirm('Apakah Anda yakin ingin menghapus sesi absensi ini? Seluruh log presensi terkait akan ikut terhapus permanen.')) return;
+        try {
+            await axios.delete(`/api/attendance/session/${session.id}`);
+            mutate();
+            if (activeLogSession?.id === session.id) setActiveLogSession(null);
+        } catch (error) {
+            alert('Gagal menghapus sesi presensi.');
+        }
+    };
+
     const stats = logDetails?.attendances ? {
         hadir: logDetails.attendances.filter(a => a.status === 'hadir').length,
         sakit: logDetails.attendances.filter(a => a.status === 'sakit').length,
@@ -272,6 +283,14 @@ export default function AttendanceDashboard() {
                                     </div>
 
                                     <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
+                                        {user?.role === 'dosen' && (
+                                            <button
+                                                onClick={() => handleDeleteSession(session)}
+                                                className="px-3.5 py-2.5 text-[10px] uppercase font-bold tracking-wider rounded-xl bg-red-950/40 hover:bg-red-900/60 text-red-400 hover:text-white border border-red-900/40 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                                            >
+                                                Hapus
+                                            </button>
+                                        )}
                                         {user?.role === 'dosen' && session.is_active && (
                                             <Link
                                                 href={`/dashboard/attendance/session?id=${session.id}`}

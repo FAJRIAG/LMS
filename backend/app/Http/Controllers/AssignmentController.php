@@ -73,7 +73,7 @@ class AssignmentController extends Controller
 
         $path = null;
         if ($request->hasFile('attachment')) {
-            $path = $request->file('attachment')->store('private/attachments');
+            $path = $request->file('attachment')->store('attachments');
         }
 
         $assignment = Assignment::create([
@@ -164,7 +164,7 @@ class AssignmentController extends Controller
         ]);
 
         // Upload file to secure private submissions folder
-        $path = $request->file('file')->store('private/submissions');
+        $path = $request->file('file')->store('submissions');
 
         // Clean up old file if overwriting/re-submitting before deadline
         $existing = Submission::where('assignment_id', $assignment->id)
@@ -234,5 +234,35 @@ class AssignmentController extends Controller
         ]);
 
         return response()->json($submission);
+    }
+
+    /**
+     * Delete an assignment (Lecturer only).
+     */
+    public function destroy(Assignment $assignment, Request $request)
+    {
+        $user = $request->user();
+
+        // Verify that the lecturer actually teaches this classroom
+        if (!$user->taughtClassrooms()->where('classrooms.id', $assignment->classroom_id)->exists()) {
+            return response()->json(['message' => 'Akses ditolak ke kelas ini.'], 403);
+        }
+
+        // Delete attachment if exists
+        if ($assignment->attachment_path && Storage::exists($assignment->attachment_path)) {
+            Storage::delete($assignment->attachment_path);
+        }
+
+        // Also delete all student submissions files
+        $submissions = $assignment->submissions;
+        foreach ($submissions as $sub) {
+            if ($sub->file_path && Storage::exists($sub->file_path)) {
+                Storage::delete($sub->file_path);
+            }
+        }
+
+        $assignment->delete();
+
+        return response()->json(['message' => 'Tugas berhasil dihapus.']);
     }
 }

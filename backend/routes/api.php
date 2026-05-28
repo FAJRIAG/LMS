@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ClassroomController;
 
 // --- RUTE PUBLIK ---
 Route::post('/login', [AuthController::class, 'login']);
@@ -33,6 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/attendance/session', [AttendanceController::class, 'indexSessions']);
     Route::get('/attendance/session/{attendance_session}', [AttendanceController::class, 'showSessionDetails']);
 
+    // Modul Data Kelas (Akses Global)
+    Route::get('/classrooms/{classroom}/students', [ClassroomController::class, 'students']);
+
     // --- RUTE KHUSUS DOSEN (LECTURER ONLY) ---
     Route::middleware('dosen')->group(function () {
         // CRUD Materi
@@ -41,11 +45,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // CRUD Tugas & Grading
         Route::post('/assignments', [AssignmentController::class, 'store']);
+        Route::delete('/assignments/{assignment}', [AssignmentController::class, 'destroy']);
         Route::get('/submissions/{submission}/download', [AssignmentController::class, 'downloadSubmission']);
         Route::post('/submissions/{submission}/grade', [AssignmentController::class, 'grade']);
 
         // Absensi QR Dinamis (Lecturer Control)
         Route::post('/attendance/session', [AttendanceController::class, 'createSession']);
+        Route::delete('/attendance/session/{attendance_session}', [AttendanceController::class, 'destroy']);
         Route::get('/attendance/session/{attendance_session}/refresh', [AttendanceController::class, 'refreshToken']);
         Route::post('/attendance/session/{attendance_session}/toggle', [AttendanceController::class, 'toggleSession']);
         Route::post('/attendance/{attendance}/manual', [AttendanceController::class, 'updateAttendanceStatus']);

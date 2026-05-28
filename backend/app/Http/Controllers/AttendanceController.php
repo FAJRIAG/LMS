@@ -274,4 +274,22 @@ class AttendanceController extends Controller
 
         return response()->json($attendance);
     }
+
+    /**
+     * Delete an attendance session (Lecturer only).
+     */
+    public function destroy(AttendanceSession $attendanceSession, Request $request)
+    {
+        $user = $request->user();
+
+        // Verify classroom access
+        if (!$user->taughtClassrooms()->where('classrooms.id', $attendanceSession->classroom_id)->exists()) {
+            return response()->json(['message' => 'Akses ditolak ke sesi kelas ini.'], 403);
+        }
+
+        // Attendance records are cascade deleted automatically via database schema or Eloquent
+        $attendanceSession->delete();
+
+        return response()->json(['message' => 'Sesi absensi berhasil dihapus.']);
+    }
 }

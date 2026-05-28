@@ -1,0 +1,258 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --background: #09090b; /* zinc-950 */
+  --foreground: #f4f4f5; /* zinc-100 */
+  --accent: #a1a1aa; /* zinc-400 */
+  --surface: #18181b; /* zinc-900 */
+  --border: #27272a; /* zinc-800 */
+  --muted: #71717a; /* zinc-500 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'Inter', var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', var(--font-geist-mono), ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================
+   CUSTOM KEYFRAME ANIMATIONS
+   ========================================== */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-fast {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,255,255,0.05); }
+  50%  { box-shadow: 0 0 20px rgba(255,255,255,0.12); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes counter-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Animation utility classes */
+.animate-fade-in       { animation: fade-in 0.4s ease-out both; }
+.animate-fade-in-fast  { animation: fade-in-fast 0.2s ease-out both; }
+.animate-slide-in-left { animation: slide-in-left 0.4s ease-out both; }
+.animate-slide-in-up   { animation: slide-in-up 0.5s ease-out both; }
+.animate-scale-in      { animation: scale-in 0.3s ease-out both; }
+.animate-glow-pulse    { animation: glow-pulse 2s ease-in-out infinite; }
+.animate-float         { animation: float 3s ease-in-out infinite; }
+.animate-spin-slow     { animation: spin-slow 8s linear infinite; }
+
+/* Stagger animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* ==========================================
+   SCROLLBAR CUSTOM STYLING
+   ========================================== */
+
+::-webkit-scrollbar        { width: 4px; height: 4px; }
+::-webkit-scrollbar-track  { background: #09090b; }
+::-webkit-scrollbar-thumb  { background: #27272a; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+/* ==========================================
+   SELECTION STYLING
+   ========================================== */
+
+::selection {
+  background: rgba(255,255,255,0.15);
+  color: #ffffff;
+}
+
+/* ==========================================
+   GLASS MORPHISM UTILITIES
+   ========================================== */
+
+.glass {
+  background: rgba(24, 24, 27, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(63, 63, 70, 0.4);
+}
+
+.glass-light {
+  background: rgba(39, 39, 42, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(63, 63, 70, 0.3);
+}
+
+/* ==========================================
+   SHIMMER LOADING SKELETON
+   ========================================== */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #18181b 0%,
+    #27272a 50%,
+    #18181b 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ==========================================
+   GRADIENT TEXT UTILITIES
+   ========================================== */
+
+.gradient-text {
+  background: linear-gradient(135deg, #f4f4f5 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-bright {
+  background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 50%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==========================================
+   HTML5 QR CODE SCANNER CUSTOM OVERRIDES
+   ========================================== */
+
+#reader {
+  border: none !important;
+  background: transparent !important;
+}
+
+#reader__scan_region {
+  background: #09090b !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  border: 1px solid #18181b !important;
+}
+
+#reader__scan_region video {
+  border-radius: 16px !important;
+}
+
+#reader__dashboard_section {
+  background: transparent !important;
+  padding: 12px 0 0 0 !important;
+}
+
+#reader__dashboard_section_csr button {
+  background: linear-gradient(to bottom, #27272a, #1c1c1f) !important;
+  color: #f4f4f5 !important;
+  border: 1px solid #3f3f46 !important;
+  padding: 10px 20px !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  transition: all 0.2s ease !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+#reader__dashboard_section_csr button:hover {
+  background: linear-gradient(to bottom, #3f3f46, #27272a) !important;
+  color: #ffffff !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 0 16px rgba(255,255,255,0.05) !important;
+}
+
+#reader__dashboard_section_csr button:active {
+  transform: scale(0.98) !important;
+}
+
+#reader__status_span {
+  font-size: 10px !important;
+  color: #71717a !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  margin-top: 8px !important;
+  display: inline-block !important;
+}
+
+#reader__dashboard_section_link {
+  display: none !important;
+}
+
+#reader__camera_selection {
+  background-color: #09090b !important;
+  color: #f4f4f5 !important;
+  border: 1px solid #27272a !important;
+  padding: 8px 14px !important;
+  border-radius: 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  outline: none !important;
+  cursor: pointer !important;
+  margin-bottom: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+#reader__camera_selection option {
+  background-color: #09090b !important;
+  color: #f4f4f5 !important;
+}

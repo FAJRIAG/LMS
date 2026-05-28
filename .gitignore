@@ -1,6 +1,7 @@
 # Root .gitignore for LMS Project (Laravel Backend + Next.js Frontend)
 
 # --- General ---
+Plan.md
 .DS_Store
 .idea/
 .vscode/
